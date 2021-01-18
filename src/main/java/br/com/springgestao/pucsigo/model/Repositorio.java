@@ -1,34 +1,39 @@
 package br.com.springgestao.pucsigo.model;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 
-import java.text.DateFormat;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "repositorio")
-public class Repositorio {
+public class Repositorio  implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    @Column(name="nome")
+    @NotNull
     private String nome;
 
-    @Column(name="url")
+    @NotNull
     private String url;
 
-    @Column(name="descricao")
+    @NotNull
     private String descricao;
 
-    @Column(name="data_criacao")
+    @NotNull
     private String data_criacao;
-
-    @Column(name="data_alteracao")
+    
     private String data_alteracao;
 
-    @Column(name="indativo")
     private Boolean indativo;
 
     public Long getId() {

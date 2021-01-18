@@ -1,12 +1,9 @@
 package br.com.springgestao.pucsigo.repository;
 
-import br.com.springgestao.pucsigo.model.Norma;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import br.com.springgestao.pucsigo.model.Norma;
 
-@Repository
 public interface NormaRepository extends JpaRepository<Norma, Long> {
-    
+    Norma findById(long id);
 }

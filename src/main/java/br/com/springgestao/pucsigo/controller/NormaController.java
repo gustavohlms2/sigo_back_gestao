@@ -1,87 +1,64 @@
 package br.com.springgestao.pucsigo.controller;
-
-import br.com.springgestao.pucsigo.controller.dto.NormaRq;
-import br.com.springgestao.pucsigo.controller.dto.NormaRs;
-import br.com.springgestao.pucsigo.model.Norma;
-import br.com.springgestao.pucsigo.repository.NormaCustomRepository;
-import br.com.springgestao.pucsigo.repository.NormaRepository;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.springgestao.pucsigo.model.Norma;
+import br.com.springgestao.pucsigo.repository.NormaRepository;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/norma")
+@RequestMapping(value="/api")
+@Api(value="API REST Norma")
 public class NormaController {
-
-    private final NormaRepository normaRepository;
-    private final NormaCustomRepository normaCustomRepository;
-
-    public NormaController(NormaRepository normaRepository, NormaCustomRepository normaCustomRepository) {
-        this.normaRepository = normaRepository;
-        this.normaCustomRepository = normaCustomRepository;
-    }
-
-    @CrossOrigin
-    @GetMapping("/")
-    public List<NormaRs> findAll() {
-        var normas = normaRepository.findAll();
-        return normas
-                .stream()
-                .map(NormaRs::converter)
-                .collect(Collectors.toList());
-    }
-
-    @CrossOrigin
-    @GetMapping("/{id}")
-    public NormaRs findById(@PathVariable("id") Long id) {
-        var norma = normaRepository.getOne(id);
-        return NormaRs.converter(norma);
-    }
-
-    @CrossOrigin
-    @PostMapping("/")
-    public void saveNorma(@RequestBody NormaRq norma) {
-        var n = new Norma();
-        n.setIdRepositorio(norma.getIdRepositorio());
-        n.setUrl(norma.getUrl());
-        n.setTitulo(norma.getTitulo());
-        n.setDescricao(norma.getDescricao());
-        n.setDataCriacao(norma.getDataCriacao());
-        n.setDataAlteracao(norma.getDataAlteracao());
-        n.setIndativo(norma.getIndativo());
-        normaRepository.save(n);
-    }
-
-    @CrossOrigin
-    @PutMapping("/{id}")
-    public void updatePerson(@PathVariable("id") Long id, @RequestBody NormaRq norma) throws Exception {
-        var p = normaRepository.findById(id);
-
-        if (p.isPresent()) {
-            var normaSave = p.get();
-            normaSave.setIdRepositorio(norma.getIdRepositorio());
-            normaSave.setUrl(norma.getUrl());
-            normaSave.setTitulo(norma.getTitulo());
-            normaSave.setDescricao(norma.getDescricao());
-            normaSave.setDataCriacao(norma.getDataCriacao());
-            normaSave.setDataAlteracao(norma.getDataAlteracao());
-            normaSave.setIndativo(norma.getIndativo());
-            normaRepository.save(normaSave);
-        } else {
-            throw new Exception("Norma Não encontrada");
-        }
-    }
-    
-    @CrossOrigin
-    @DeleteMapping("/{id}")
-    public void updatePerson(@PathVariable("id") Long id ) throws Exception {
-        var p = normaRepository.findById(id);
-        if (p.isPresent()) {
-            normaRepository.deleteById(id);        
-        } else {
-            throw new Exception("Norma Não encontrada");
-        }
-    }
+	
+	@Autowired
+	NormaRepository normaRepository;
+	
+	@ApiOperation(value="Retorna uma lista de Normas")
+	@GetMapping("/norma")
+	public List<Norma> listaProdutos(){
+		return normaRepository.findAll();
+	}
+	
+	@ApiOperation(value="Retorna um norma unico")
+	@GetMapping("/norma/{id}")
+	public Norma listaProdutoUnico(@PathVariable(value="id") long id){
+		return normaRepository.findById(id);
+	}
+	
+	@ApiOperation(value="Salva um norma")
+	@PostMapping("/norma")
+	public Norma salvaProduto(@RequestBody @Valid Norma norma) {
+		return normaRepository.save(norma);
+	}
+	
+	@ApiOperation(value="Deleta um norma")
+	@DeleteMapping("/norma")
+	public void deletaProduto(@RequestBody @Valid Norma norma) {
+		normaRepository.delete(norma);
+	}
+	
+	@ApiOperation(value="Atualiza um norma")
+	@PutMapping("/norma")
+	public Norma atualizaProduto(@RequestBody @Valid Norma norma) {
+		return normaRepository.save(norma);
+	}
+	 
 
 }

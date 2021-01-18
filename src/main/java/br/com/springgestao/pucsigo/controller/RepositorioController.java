@@ -1,85 +1,64 @@
 package br.com.springgestao.pucsigo.controller;
-
-import br.com.springgestao.pucsigo.controller.dto.RepositorioRq;
-import br.com.springgestao.pucsigo.controller.dto.RepositorioRs;
-import br.com.springgestao.pucsigo.model.Repositorio;
-import br.com.springgestao.pucsigo.repository.RepositorioCustomRepository;
-import br.com.springgestao.pucsigo.repository.RepositorioRepository;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.springgestao.pucsigo.model.Repositorio;
+import br.com.springgestao.pucsigo.repository.RepositorioRepository;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/repositorio")
+@RequestMapping(value="/api")
+@Api(value="API REST Repositorios")
 public class RepositorioController {
-
-    private final RepositorioRepository repositorioRepository;
-    private final RepositorioCustomRepository repositorioCustomRepository;
-
-    public RepositorioController(RepositorioRepository repositorioRepository, RepositorioCustomRepository repositorioCustomRepository) {
-        this.repositorioRepository = repositorioRepository;
-        this.repositorioCustomRepository = repositorioCustomRepository;
-    }
-
-    @CrossOrigin
-    @GetMapping("/")
-    public List<RepositorioRs> findAll() {
-        var repositorios = repositorioRepository.findAll();
-        return repositorios
-                .stream()
-                .map(RepositorioRs::converter)
-                .collect(Collectors.toList());
-    }
-
-    @CrossOrigin
-    @GetMapping("/{id}")
-    public RepositorioRs findById(@PathVariable("id") Long id) {
-        var repositorio = repositorioRepository.getOne(id);
-        return RepositorioRs.converter(repositorio);
-    }
-
-    @CrossOrigin
-    @PostMapping("/")
-    public void saveRepositorio(@RequestBody RepositorioRq repositorio) {
-        var n = new Repositorio();
-        n.setNome(repositorio.getNome());
-        n.setUrl(repositorio.getUrl());
-        n.setDescricao(repositorio.getDescricao());
-        n.setDataCriacao(repositorio.getDataCriacao());
-        n.setDataAlteracao(repositorio.getDataAlteracao());
-        n.setIndativo(repositorio.getIndativo());
-        repositorioRepository.save(n);
-    }
-
-    @CrossOrigin
-    @PutMapping("/{id}")
-    public void updatePerson(@PathVariable("id") Long id, @RequestBody RepositorioRq repositorio) throws Exception {
-        var p = repositorioRepository.findById(id);
-
-        if (p.isPresent()) {
-            var repositorioSave = p.get();
-            repositorioSave.setNome(repositorio.getNome());
-            repositorioSave.setUrl(repositorio.getUrl());
-            repositorioSave.setDescricao(repositorio.getDescricao());
-            repositorioSave.setDataCriacao(repositorio.getDataCriacao());
-            repositorioSave.setDataAlteracao(repositorio.getDataAlteracao());
-            repositorioSave.setIndativo(repositorio.getIndativo());
-            repositorioRepository.save(repositorioSave);
-        } else {
-            throw new Exception("Repositorio Não encontrada");
-        }
-    }
-    
-    @CrossOrigin
-    @DeleteMapping("/{id}")
-    public void updatePerson(@PathVariable("id") Long id ) throws Exception {
-        var p = repositorioRepository.findById(id);
-        if (p.isPresent()) {
-            repositorioRepository.deleteById(id);        
-        } else {
-            throw new Exception("Repositorio Não encontrada");
-        }
-    }
+	
+	@Autowired
+	RepositorioRepository repositorioRepository;
+	
+	@ApiOperation(value="Retorna uma lista de Repositorios")
+	@GetMapping("/repositorio")
+	public List<Repositorio> listaProdutos(){
+		return repositorioRepository.findAll();
+	}
+	
+	@ApiOperation(value="Retorna um repositorio unico")
+	@GetMapping("/repositorio/{id}")
+	public Repositorio listaProdutoUnico(@PathVariable(value="id") long id){
+		return repositorioRepository.findById(id);
+	}
+	
+	@ApiOperation(value="Salva um repositorio")
+	@PostMapping("/repositorio")
+	public Repositorio salvaProduto(@RequestBody @Valid Repositorio repositorio) {
+		return repositorioRepository.save(repositorio);
+	}
+	
+	@ApiOperation(value="Deleta um repositorio")
+	@DeleteMapping("/repositorio")
+	public void deletaProduto(@RequestBody @Valid Repositorio repositorio) {
+		repositorioRepository.delete(repositorio);
+	}
+	
+	@ApiOperation(value="Atualiza um repositorio")
+	@PutMapping("/repositorio")
+	public Repositorio atualizaProduto(@RequestBody @Valid Repositorio repositorio) {
+		return repositorioRepository.save(repositorio);
+	}
+	 
 
 }
