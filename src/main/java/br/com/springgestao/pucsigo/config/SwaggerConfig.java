@@ -20,11 +20,11 @@ import java.util.ArrayList;
 @EnableSwagger2
 public class SwaggerConfig {
 	
-	@Bean
+    @Bean
     public Docket productApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.springgestao.pucsigo"))
+                .apis(RequestHandlerSelectors.basePackage("br.com.springgestao.pucsigo"))
                 .paths(regex("/api.*"))
                 .build()
                 .apiInfo(metaInfo());
@@ -34,7 +34,7 @@ public class SwaggerConfig {
 
         ApiInfo apiInfo = new ApiInfo(
                 "Produtos API REST",
-                "API REST de cadastro de produtos.",
+                "API REST de cadastro de normas e repositorios.",
                 "1.0",
                 "Terms of Service",
                 new Contact("Gustavo Moreira", "",
