@@ -1,7 +1,7 @@
 version: '3'
 services:
   pucsigo:
-    image: 'docker-spring-boot-postgres:latest'
+    image: spring_boo_com_mysql/api
     build:
       context: .
     container_name: pucsigo
@@ -16,7 +16,7 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
           
   db:
-    image: 'postgres:13.1-alpine'
+    image: 'postgres'
     container_name: db
     environment:
       - POSTGRES_DATABASES=db
