@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class RepositorioControllerTest {
+public class RepositorioControllerTests {
     @Autowired
 	private RepositorioController controller;
 
