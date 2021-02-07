@@ -63,7 +63,7 @@ public class Repositorio  implements Serializable {
     }
 
     public String getVersao() {
-        return url;
+        return versao;
     }
 
     public void setVersao(String versao) {
