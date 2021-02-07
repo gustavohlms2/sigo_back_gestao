@@ -1,4 +1,18 @@
-# produtos-apirest
+# gestao
+
+## Recompilar dependencia
+mvn clean package
+
+## Subir aplicacao
+mvn spring-boot:run
+
+## Rodar testes
+mvn test
+
+## Subir aplicação docker 
+sudo docker-compose up --build --force-recreate
+
+
 API REST de produtos com Swagger-ui. Disponível em https://dashboard.heroku.com/apps/sigo-back-gestao/swagger-ui.html#/produto45resource
 
 
@@ -30,3 +44,8 @@ java -Dserver.port=5050 -jar target/pucsigo-0.0.1-SNAPSHOT.jar
 
 Docker subir aplicacao 
 sudo docker-compose up --build --force-recreate
+
+
+#mvn dependency:tree -Dverbose
+#sudo createdb -h localhost -p 5432 -U postgres processo_api
+#sudo service postgresql 

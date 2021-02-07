@@ -29,6 +29,8 @@ public class Repositorio  implements Serializable {
     @NotNull
     private String descricao;
 
+    private String versao;
+
     @NotNull
     private String data_criacao;
     
@@ -60,6 +62,14 @@ public class Repositorio  implements Serializable {
         this.url = url;
     }
 
+    public String getVersao() {
+        return url;
+    }
+
+    public void setVersao(String versao) {
+        this.versao = versao;
+    }
+    
     public String getDescricao() {
         return descricao;
     }
